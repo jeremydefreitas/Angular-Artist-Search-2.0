@@ -4,6 +4,8 @@ A full-stack web application for discovering artists and their artworks using th
 
 Live demo: https://jeremy-defreitas-hw3-570.uw.r.appspot.com/search
 
+Backend live demo: https://jeremy-defreitas-hw3-570.uw.r.appspot.com/api/artist-search/picasso
+
 ## Features
 
 - **Artist Search**: Search for artists and view detailed information
