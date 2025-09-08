@@ -1,0 +1,12 @@
+.nav-link {
+    background-color: white;
+}
+
+.nav-link.active {
+    background-color: #024D91;
+}
+
+.card-body-sm.hovered {
+    background-color: #024D91 !important;
+  }
+  

@@ -1,0 +1,118 @@
+<form
+  class="mx-auto"
+  style="
+    max-width: 400px;
+    margin-top: 50px;
+    border: 2px solid #e5e7e9;
+    padding: 20px;
+    border-radius: 7px;
+  "
+  (submit)="onSubmit()"
+  #registerForm="ngForm"
+  ngNativeValidate
+>
+  <h2 class="mb-4">Register</h2>
+  <div class="mb-3 position-relative">
+    <label for="fullname" class="form-label mb-0">Fullname</label>
+    <input
+      type="text"
+      class="form-control"
+      id="fullname"
+      [(ngModel)]="fullname"
+      name="fullname"
+      required
+      #fullnameInput="ngModel"
+      [ngClass]="{
+        'is-invalid': fullnameInput.invalid && fullnameInput.touched
+      }"
+      (ngModelChange)="clearError()"
+    />
+    <div
+      *ngIf="fullnameInput.invalid && fullnameInput.touched"
+      class="invalid-feedback"
+    >
+      Fullname is required.
+    </div>
+    <div
+      *ngIf="fullnameInput.invalid && fullnameInput.touched"
+      class="position-absolute top-50 end-0 me-2"
+    >
+      <i class="bi bi-exclamation-circle text-danger"></i>
+    </div>
+  </div>
+  <div class="mb-3 position-relative">
+    <label for="email" class="form-label mb-0">Email address</label>
+    <input
+      type="email"
+      class="form-control"
+      id="email"
+      [(ngModel)]="email"
+      name="email"
+      required
+      pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+      #emailInput="ngModel"
+      [ngClass]="{ 'is-invalid': emailInput.invalid && emailInput.touched }"
+      (ngModelChange)="clearError()"
+    />
+    <div
+      *ngIf="emailInput.invalid && emailInput.touched"
+      class="invalid-feedback"
+    >
+      A valid email is required.
+    </div>
+    <div
+      *ngIf="emailInput.invalid && emailInput.touched"
+      class="position-absolute top-50 end-0 me-2"
+    >
+      <i class="bi bi-exclamation-circle text-danger"></i>
+    </div>
+  </div>
+  <div class="mb-3 position-relative">
+    <label for="password" class="form-label mb-0">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password"
+      [(ngModel)]="password"
+      name="password"
+      required
+      #passwordInput="ngModel"
+      [ngClass]="{
+        'is-invalid': passwordInput.invalid && passwordInput.touched
+      }"
+      (ngModelChange)="clearError()"
+    />
+    <div
+      *ngIf="passwordInput.invalid && passwordInput.touched"
+      class="invalid-feedback"
+    >
+      Password is required.
+    </div>
+    <div
+      *ngIf="passwordInput.invalid && passwordInput.touched"
+      class="position-absolute top-50 end-0 me-2"
+    >
+      <i class="bi bi-exclamation-circle text-danger"></i>
+    </div>
+    <div *ngIf="errorMessage" class="text-danger mb-3">
+      {{ errorMessage }}
+    </div>
+  </div>
+
+  <div class="d-grid">
+    <button
+      class="btn btn-primary"
+      type="submit"
+      [disabled]="registerForm.invalid"
+    >
+      Register
+    </button>
+  </div>
+</form>
+
+<div class="mx-auto text-center" style="max-width: 400px; margin-top: 10px">
+  Already have an account?
+  <a routerLink="/login" routerLinkActive="active" class="text-decoration-link"
+    >Login</a
+  >
+</div>

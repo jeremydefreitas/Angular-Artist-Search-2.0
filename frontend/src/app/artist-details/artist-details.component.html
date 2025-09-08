@@ -1,0 +1,299 @@
+<ul class="nav nav-pills nav-fill mt-2" id="pills-tab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link"
+      id="pills-home-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#pills-home"
+      type="button"
+      role="tab"
+      aria-controls="pills-home"
+      [attr.aria-selected]="activeTab === 'info'"
+      [class.active]="activeTab === 'info'"
+      (click)="activeTab = 'info'"
+    >
+      Artist Info
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link"
+      id="pills-profile-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#pills-profile"
+      type="button"
+      role="tab"
+      aria-controls="pills-profile"
+      [attr.aria-selected]="activeTab === 'artworks'"
+      [class.active]="activeTab === 'artworks'"
+      (click)="activeTab = 'artworks'"
+    >
+      Artworks
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content mt-2" id="pills-tabContent">
+  <div
+    class="tab-pane show active"
+    id="pills-home"
+    role="tabpanel"
+    aria-labelledby="pills-home-tab"
+    [class.show]="activeTab === 'info'"
+    [class.active]="activeTab === 'info'"
+  >
+    <div *ngIf="isDetailsLoading">
+      <div class="text-center mt-5">
+        <div
+          class="spinner-border text-primary text-center"
+          role="status"
+        ></div>
+      </div>
+    </div>
+    <div *ngIf="!isDetailsLoading">
+      <div class="text">
+        <div class="text-center">
+          <span class="h4">{{ artistDetails?.name ?? "" }}</span>
+
+          <ng-container *ngIf="isAuthenticated">
+            <button
+              (click)="
+                isFavorite(artistDetails)
+                  ? removeFromFavorites(artistDetails)
+                  : addToFavorites(artistDetails)
+              "
+              type="button"
+              class="btn p-0 border-0 align-baseline ms-2"
+              style="background: transparent"
+            >
+              <img
+                [src]="
+                  isFavorite(artistDetails)
+                    ? '../../assets/star-solid.svg'
+                    : '../../assets/star-regular-black.svg'
+                "
+                alt="favorite"
+                style="
+                  width: 20px;
+                  height: 20px;
+
+                  vertical-align: text-bottom;
+                "
+              />
+            </button>
+          </ng-container>
+
+          <br />
+          <small>
+            {{
+              artistDetails?.nationality
+                ? artistDetails?.nationality + ", "
+                : ""
+            }}
+
+            {{ artistDetails?.birthday }} - {{ artistDetails?.deathday }}</small
+          >
+          <br />
+        </div>
+        <div
+          [innerHTML]="formatBiography(artistDetails?.biography)"
+          class="p-3"
+        ></div>
+        <br />
+      </div>
+      <div *ngIf="showSimilarArtists" class="mb-5">
+        <div class="text-left">
+          <h4>Similar Artists:</h4>
+        </div>
+        <div class="d-flex flex-nowrap overflow-auto mt-2">
+          <div
+            class="flex-shrink-0 me-2"
+            style="min-width: 200px; width: 200px"
+            *ngFor="let result of similarArtists"
+          >
+            <div
+              class="card"
+              (click)="onCardClick(result)"
+              (mouseover)="onHover(true, result)"
+              (mouseleave)="onHover(false, result)"
+              [ngClass]="{ hovered: isHovered(result) }"
+            >
+              <div class="ratio ratio-1x1 position-relative">
+                <img
+                  [src]="
+                    result._links.thumbnail.href ===
+                    '/assets/shared/missing_image.png'
+                      ? '../../assets/artsy_logo.svg'
+                      : result._links.thumbnail.href
+                  "
+                  class="card-img-top img-fluid"
+                  alt="Thumbnail"
+                  style="object-fit: cover"
+                />
+              </div>
+              <button
+                (click)="
+                  isFavorite(result)
+                    ? removeFromFavorites(result)
+                    : addToFavorites(result)
+                "
+                type="button"
+                class="btn p-0 border-0 position-absolute top-0 end-0 m-2"
+              >
+                <img
+                  [src]="
+                    isFavorite(result)
+                      ? '../../assets/star-solid.svg'
+                      : '../../assets/star-regular.svg'
+                  "
+                  alt="favorite"
+                  style="
+                    width: 40px;
+                    height: 40px;
+                    background-color: #205375;
+                    border-radius: 50%;
+                    padding: 5px;
+                    color: aliceblue;
+                  "
+                  class="position-absolute top-0 end-0 m-2"
+                />
+              </button>
+              <div
+                class="card-body-sm p-2 similar-card text-white shadow m-0"
+                [ngStyle]="{
+                  'background-color': isActiveCard(result)
+                    ? '#024D91'
+                    : '#205375'
+                }"
+                (mouseover)="onHover(true, result)"
+                (mouseleave)="onHover(false, result)"
+                [ngClass]="{ hovered: isHovered(result) }"
+              >
+                <h5 class="card-title">{{ result.name }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="tab-pane"
+    id="pills-profile"
+    role="tabpanel"
+    aria-labelledby="pills-profile-tab"
+    [class.show]="activeTab === 'artworks'"
+    [class.active]="activeTab === 'artworks'"
+  >
+    <div *ngIf="isArtworkLoading">
+      <div class="text-center mt-5">
+        <div
+          class="spinner-border text-primary text-center"
+          role="status"
+        ></div>
+      </div>
+    </div>
+    <div *ngIf="!isArtworkLoading">
+      <div *ngIf="isEmpty">
+        <div class="alert alert-danger mt-3" role="alert">No artworks.</div>
+      </div>
+      <div *ngIf="!isEmpty">
+        <div class="row row-cols-1 row-cols-lg-5 g-4 pb-5">
+          <div
+            class="col"
+            *ngFor="let details of artworkDetails; let index = index"
+          >
+            <div class="card">
+              <div class="ratio ratio-1x1">
+                <img
+                  [src]="details._links.thumbnail.href"
+                  class="card-img-top img-fluid"
+                  [alt]="details.title"
+                />
+              </div>
+              <div class="card-body text-center">
+                <small class="card-title text-center"
+                  >{{ details.title }}, {{ details.date }}</small
+                >
+              </div>
+              <button
+                type="button"
+                class="btn btn-light"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                (click)="onCategoryClick(details.id)"
+              >
+                View categories
+              </button>
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <img
+                        [src]="details._links.thumbnail.href"
+                        style="width: 35px; height: 45px"
+                      />
+                      <h5 class="modal-title p-2" style="font-size: 0.9rem">
+                        {{ details.title }} <br />
+                        {{ details.date }}
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <div *ngIf="isCategoryLoading">
+                        <div class="text-center mt-5">
+                          <div
+                            class="spinner-border text-primary text-center"
+                            role="status"
+                          ></div>
+                        </div>
+                      </div>
+                      <div *ngIf="!isCategoryLoading">
+                        <div>
+                          <div class="row row-cols-1 row-cols-lg-5 g-4">
+                            <div
+                              class="col"
+                              *ngFor="
+                                let details of categoryDetails;
+                                let index = index
+                              "
+                            >
+                              <div class="card h-100">
+                                <div class="ratio ratio-1x1">
+                                  <img
+                                    [src]="details._links.thumbnail.href"
+                                    class="card-img-top img-fluid"
+                                    [alt]="details.title"
+                                  />
+                                </div>
+                                <div class="card-body text-center">
+                                  <h5 class="card-title">{{ details.name }}</h5>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

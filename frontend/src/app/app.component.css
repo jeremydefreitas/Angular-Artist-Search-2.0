@@ -1,0 +1,21 @@
+.footer {
+    font-family: sans-serif;
+    font-size: 18px;
+    text-align: center;
+    background-color: #112938;
+    padding: 9px;
+    color: rgb(236, 233, 233);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .footer a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .footer img{
+    margin-bottom: 8px;
+  }

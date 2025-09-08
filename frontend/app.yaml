@@ -1,0 +1,8 @@
+runtime: python39
+api_version: 1
+handlers:
+  - url: /
+    static_files: dist/571-hw3/browser/index.html
+    upload: dist/571-hw3/browser/index.html
+  - url: /static
+    static_dir: dist/571-hw3/browser

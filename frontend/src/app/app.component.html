@@ -1,0 +1,161 @@
+<div *ngIf="isLoggedIn; else loggedOut">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a routerLink="/search" class="navbar-brand">Artist Search</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-lg-auto mt-2">
+          <li class="nav-item mb-2 mb-lg-0">
+            <a
+              routerLink="/search"
+              routerLinkActive="active"
+              [ngClass]="{
+                'btn-primary': isActive('/search'),
+                'btn-light': !isActive('/search')
+              }"
+              class="btn w-100"
+              aria-current="page"
+            >
+              Search
+            </a>
+          </li>
+          <li class="nav-item mb-2 mb-lg-0">
+            <a
+              routerLink="/favorites"
+              routerLinkActive="active"
+              [ngClass]="{
+                'btn-primary': isActive('/favorites'),
+                'btn-light': !isActive('/favorites')
+              }"
+              class="btn w-100"
+            >
+              Favorites
+            </a>
+          </li>
+          <li class="nav-item mb-2 mb-lg-0">
+            <div class="dropdown w-100">
+              <button
+                class="btn btn-light dropdown-toggle d-flex align-items-center w-100"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="background-color: transparent; border: none"
+              >
+                <img
+                  src="{{ profileImageUrl }}"
+                  alt="Profile"
+                  class="rounded-circle me-2"
+                  style="width: 30px; height: 30px"
+                />
+                {{ name }}
+              </button>
+
+              <ul
+                class="dropdown-menu w-100"
+                aria-labelledby="dropdownMenuButton1"
+              >
+                <li>
+                  <button
+                    class="dropdown-item text-danger"
+                    (click)="deleteAccount()"
+                  >
+                    Delete account
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" (click)="logout()">
+                    Log out
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<ng-template #loggedOut>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a routerLink="/search" class="navbar-brand">Artist Search</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-lg-auto mt-2">
+          <li class="nav-item mb-2 mb-lg-0">
+            <a
+              routerLink="/search"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [ngClass]="{
+                'btn-primary': isActive('/search'),
+                'btn-light': !isActive('/search')
+              }"
+              class="btn w-100"
+              aria-current="page"
+            >
+              Search
+            </a>
+          </li>
+          <li class="nav-item mb-2 mb-lg-0">
+            <a
+              routerLink="/login"
+              routerLinkActive="active"
+              [ngClass]="{
+                'btn-primary': isActive('/login'),
+                'btn-light': !isActive('/login')
+              }"
+              class="btn w-100"
+            >
+              Log in
+            </a>
+          </li>
+          <li class="nav-item mb-2 mb-lg-0">
+            <a
+              routerLink="/register"
+              routerLinkActive="active"
+              [ngClass]="{
+                'btn-primary': isActive('/register'),
+                'btn-light': !isActive('/register')
+              }"
+              class="btn w-100"
+            >
+              Register
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</ng-template>
+<router-outlet></router-outlet>
+<app-notifications></app-notifications>
+<footer class="footer">
+  Powered by
+  <img src="../assets/artsy_logo.svg" width="12px" />
+  <a href="https://www.artsy.net/" target="_blank" rel="noopener noreferrer"
+    >Artsy.</a
+  >
+</footer>
