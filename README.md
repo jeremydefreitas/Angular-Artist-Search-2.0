@@ -2,6 +2,8 @@
 
 A full-stack web application for discovering artists and their artworks using the Artsy API.
 
+Live demo: https://jeremy-defreitas-hw3-570.uw.r.appspot.com/search
+
 ## Features
 
 - **Artist Search**: Search for artists and view detailed information
